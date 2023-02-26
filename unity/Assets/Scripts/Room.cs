@@ -26,13 +26,14 @@ public class Room : MonoBehaviour
         ALL_DOOR = 0b1111
     };
 
-    public RoomType type {get {return _type;}}
+    public RoomType type {get {return _type;} set {_type = value; OnValidate(); }}
     public List<Vector2Int> doorpositions {get {return _doorpositions;}}
 
     public PlayerScript playerscript {set {_playerscript = value; } get { return _playerscript; }}
 
     [SerializeField] private RoomType _type;
-    // idx: 0,1,2,3 => WEST,SOUTH,EAST,NORTH
+    // idx: 0..3,4..7,8..11,12..15 => WEST,SOUTH,EAST,NORTH
+    // 0,1,2,3 tiles in order top left, top right, bottom left, bottom right
     [SerializeField] private List<TileBase> _doortiles;
     [SerializeField] private List<Vector2Int> _doorpositions;
     [SerializeField] private PlayerScript _playerscript;
@@ -79,10 +80,9 @@ public class Room : MonoBehaviour
         _level = GetComponentInParent<Level>();
         _playerscript = GetComponentInChildren<PlayerScript>();
         _roomtilemaps = GetComponentsInChildren<RoomTilemap>();
-        //TODO: fix for 2x2 door
-        /*for(int i = 0;i < _roomtilemaps.Length;i++)
+        for(int i = 0;i < _roomtilemaps.Length;i++)
         {
             _roomtilemaps[i].UpdateTiles(_type, _doorpositions);
-        }*/
+        }
     }
 }
